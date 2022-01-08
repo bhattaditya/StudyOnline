@@ -1,0 +1,30 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    {% for room in rooms %}
+        <article class="content-section">
+            <div class="media-body">
+                <div class="article-metadata border-bottom mb-2">
+                    <img class="rounded-circle host-img" src="{{url_for('static', filename='profile_pics/' + room.creator.image_file) }}">
+                    <a class="article-title" href="{{url_for('profile', username=room.creator.username)}} "><b>@{{ room.creator.username }}</b></a>
+                    <small style="float: right;">{{ room.date_created.strftime('%b %d %Y') }}</small>
+                    <h2><a class="article-title" href="{{url_for('room', pk=room.id)}}">
+                        {% if room.description|length < 25 %}
+                        {{ room.description }}
+                        {% else %}
+                            {{ room.description[:25]+' ...' }}
+                        {% endif %}
+                        </a></h2>
+                </div>
+                <small>{{room.total_members}} Joined</small>
+                <div class="topic">
+                    {% if room.topic|length > 11 %}
+                        <small>{{ room.topic[:5]+' ...' }}</small>
+                    {% else %}
+                        <small>{{ room.topic }}</small>
+                    {% endif %}
+                </div>
+            </div>
+        </article>
+    {% endfor %}
+{% endblock %}

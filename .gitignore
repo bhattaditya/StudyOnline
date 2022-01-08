@@ -1,0 +1,3 @@
+venv/
+mystore.db
+**__pycache__/

@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div>
+        <div style="text-align: center;">
+            <img class="rounded-circle account-img" src="{{url_for('static', filename='profile_pics/' + room.creator.image_file) }}">
+            <h5>{{room.creator.name}}</h5> 
+            <h6>@{{room.creator.username}} (host)</h6>
+        </div>
+        
+        
+        <h1>{{room.description}}</h1>
+        {% if rooms_number|length == 0 %}
+            <h3>As of now there are {{room.total_members}} Participants</h3>
+        {% else %}
+            <h3>As of now there are {{room.total_members}} Participants</h3>
+            <li>
+
+            </li>
+        {% endif %}
+    </div>
+        
+{% endblock %}
