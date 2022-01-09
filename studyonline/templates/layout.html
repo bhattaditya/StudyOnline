@@ -8,6 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}" type="text/css">
+    <script src="{{url_for('static', filename='js/main.js')}}"></script>
     {% if title %}
         <title>{{title}}</title>
     {% else %}
@@ -16,7 +17,7 @@
 </head>
 <body>
     <header class="site-header">
-        <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+        <nav class="navbar navbar-expand-md navbar-dark navbar-color fixed-top">
           <div class="container">
             <a class="navbar-brand mr-4" href="/">Study Online</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,48 +38,34 @@
                     <a class="nav-item nav-link" href="{{url_for('login')}}">Login</a>
                     <a class="nav-item nav-link" href="{{url_for('register')}}">Register</a>
                 {% endif %}
-                
               </div>
             </div>
           </div>
         </nav>
     </header>
-    <main role="main" class="container">
-        <div class="row">
-            <div class="col-md-3">
-                <p>
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                    when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, 
-                    but also the leap into electronic typesetting, remaining essentially unchanged. 
-                    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
-                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                </p>
-            </div>
-            <div class="col-md-6">
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-                {% endwith %}
-                {% block content %}{% endblock %}
-            </div>
-            <div class="col-md-3">
-                <p>
-                    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. 
-                    The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, 
-                    content here', making it look like readable English. 
-                    Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 
-                    'lorem ipsum' will uncover many web sites still in their infancy. 
-                    Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-                </p>
-            </div>
+    <div class="new-container">
+        <div class="topics-covered">
+            {% block left %}{% endblock %}
         </div>
-    </main>
+    
+        <div class="main-content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </div>
+
+        <div class="not-sure">
+            {% block right %}{% endblock %}
+        </div>
+    </div>
+
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

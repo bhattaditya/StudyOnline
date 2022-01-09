@@ -1,3 +1,4 @@
 venv/
 mystore.db
 **__pycache__/
+executing_queries.py

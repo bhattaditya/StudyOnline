@@ -4,8 +4,8 @@ body {
   margin-top: 5rem;
 }
 
-.bg-steel {
-  background-color: #091f30;
+.navbar-color {
+  background:  #5a5d91;
 }
 
 .site-header .navbar-nav .nav-link {
@@ -21,16 +21,14 @@ body {
 }
 
 .content-section {
-  background: #bac4c4;
+  background: #404370;
   padding: 10px 20px;
-  border: 1px solid #dddddd;
   border-radius: 15px;
   margin-bottom: 20px;
 }
 
 .article-title {
-  color: #444444;
-  
+  color: #f0eeee;
 }
 
 .article-title:hover {
@@ -48,7 +46,6 @@ body {
 .article-metadata {
   padding-bottom: 10px;
 }
-
 
 .account-img {
   height: 125px;
@@ -70,3 +67,29 @@ body {
 .article-date{
   text-align: right;
 }
+
+button{
+  background-color: #a4a8f0;
+  border-radius: 5px;
+}
+
+.new-container{
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  padding: 10px;
+}
+
+.topics-covered, .main-content, .not-sure {
+  padding: 0 20px 0 20px;
+}
+
+@media screen and (max-width: 650px) {
+  .topics-covered,
+  .not-sure {
+    display: none;
+  }
+  .new-container{
+    grid-template-columns: 100%;
+    min-width: 400px;
+  }
+} 

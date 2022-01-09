@@ -24,7 +24,7 @@ def home():
     """
     Home Page/ Landing Page
     """
-    rooms = Room.query.all()
+    rooms = Room.query.order_by(Room.date_created.desc()).all()
     return render_template('home.html', title='Home', rooms=rooms)
 
 @app.route('/about')
@@ -75,6 +75,7 @@ def logout():
     """
 
     logout_user()
+    flash('Logged out! see you next time.', 'success')
     return redirect(url_for('home'))
 
 @app.route('/register', methods=['GET','POST'])
@@ -173,4 +174,11 @@ def create_room():
 def profile(username):
     user = User.query.filter_by(username=username).first()
     # print(user)
+    # join()
     return render_template('profile.html', user=user)
+
+
+# def join():
+#     for room in current_user.rooms:
+#         print(room.id)
+        # can't join as room is created by that user itself.
