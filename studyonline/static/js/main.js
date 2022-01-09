@@ -1,3 +1,5 @@
+// currently not in use
+ 
 function changeColor(color) {
     document.getElementById("demo").style.background = color;
     document.getElementById("demo").innerHTML = "Joined!";

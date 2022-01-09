@@ -98,3 +98,16 @@ class CreateRoomForm(FlaskForm):
     description = StringField('Description', validators=[DataRequired()])
     create = SubmitField('Create Room')
 
+class UpdateRoomForm(FlaskForm):
+    """
+    'UpdateRoom' form 
+        Fields
+            topic
+            description
+        Button
+            update
+    """
+
+    topic = StringField('Topic', validators=[DataRequired()])
+    description = StringField('Description', validators=[DataRequired()])
+    update = SubmitField('Update Room')

@@ -10,14 +10,7 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_user, current_user, logout_user, login_required
 from studyonline import app, db, bcrypt
 from studyonline.models import User, Room
-from studyonline.forms import LoginForm, RegistrationForm, UpdateAccountForm, CreateRoomForm
-
-
-# rooms = [
-#     {'id': 1, 'creator': 'Aditya', 'topic': 'python', 'date_created': '7 Jan 2022', 'description': 'let\'s learn python'},
-#     {'id': 2, 'creator': 'Ashish', 'topic': 'java', 'date_created': '8 Jan 2022', 'description': 'let\'s learn java'},
-#     {'id': 3, 'creator': 'Deepak', 'topic': 'c++',  'date_created': '9 Jan 2022','description': 'let\'s learn c++'}
-# ]
+from studyonline.forms import LoginForm, RegistrationForm, UpdateAccountForm, CreateRoomForm, UpdateRoomForm
 
 @app.route('/')
 def home():
@@ -155,11 +148,13 @@ def account():
         form.username.data = current_user.username
         form.email.data = current_user.email
 
-    # image_file = url_for('static', filename=f'profile_pics/{current_user.image_file}')
-    return render_template('account.html', title="account", form=form)
+    return render_template('account.html', title="Account", form=form)
 
 @app.route('/create_room', methods=['GET', 'POST'])
 def create_room():
+    """
+    This will create a new room.
+    """
     form= CreateRoomForm()
     if form.validate_on_submit():
         room = Room(topic=form.topic.data, description=form.description.data, user_id=current_user.id)
@@ -173,12 +168,37 @@ def create_room():
 @login_required
 def profile(username):
     user = User.query.filter_by(username=username).first()
-    # print(user)
-    # join()
-    return render_template('profile.html', user=user)
+    return render_template('profile.html', title='Profile', user=user)
 
+@app.route('/update_room/<int:pk>', methods=['GET', 'POST'])
+@login_required
+def update_room(pk):
+    """
+    This will update a existing room.
+    """
+    room = Room.query.get_or_404(pk)
+    form = UpdateRoomForm()
+    if form.validate_on_submit():
+        room.topic = form.topic.data
+        room.description = form.description.data
+        db.session.commit()
+        flash('Room Updated!', 'success')
+        return redirect(url_for('home'))
 
-# def join():
-#     for room in current_user.rooms:
-#         print(room.id)
-        # can't join as room is created by that user itself.
+    elif request.method == 'GET':
+        # room = Room(topic=form.topic.data, description=form.description.data, user_id=current_user.id)
+        form.topic.data = room.topic
+        form.description.data = room.description
+
+    return render_template('update_room.html', title='Update',form=form) 
+
+@app.route('/delete_room/<int:pk>', methods=['GET', 'POST'])
+def delete_room(pk):
+    """
+    This will delete an existing room.
+    """
+    room = Room.query.get_or_404(pk)
+    db.session.delete(room)
+    db.session.commit()
+    flash('Room Deleted!', 'success')
+    return redirect(url_for('home'))

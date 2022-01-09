@@ -1,7 +1,11 @@
 body {
-  background: #3f4163;
+  background: #36374b;
   color: #fff2f2;
   margin-top: 5rem;
+}
+
+.modal-content{
+  background: #36374b;
 }
 
 .navbar-color {
@@ -58,7 +62,7 @@ body {
   text-align: center;
   float: right;
   width: 20%;
-  background-color: #8b9094b6;
+  background-color: #62686db6;
   border-radius: 15px;
   padding-bottom: 1px;
   margin-bottom: 4px;
@@ -66,11 +70,6 @@ body {
 
 .article-date{
   text-align: right;
-}
-
-button{
-  background-color: #a4a8f0;
-  border-radius: 5px;
 }
 
 .new-container{
