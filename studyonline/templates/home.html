@@ -5,7 +5,7 @@
     <div class="left-section">
         <h3>All Topics: {{ rooms|length }}</h3>
         {% for room in rooms %}
-        <a  class="article-title" href="{{url_for('room', pk=room.id)}}">{{room.topic}}</a> <br><br>
+        <a  class="article-title" href="https://www.google.com/search?q={{room.topic}}" target="_blank">{{room.topic}}</a> <br><br>
     {% endfor %}
     </div>
 </p>
@@ -59,7 +59,7 @@
                         </div>
                     </div>
                 </div>
-                <small id="demo1">{{room.total_members}}</small> <small>Joined</small> 
+                <small>Joined</small> 
                 <div class="topic">
                     {% if room.topic|length > 11 %}
                         <small>{{ room.topic[:5]+' ...' }}</small>
