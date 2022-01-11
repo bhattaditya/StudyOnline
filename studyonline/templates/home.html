@@ -1,63 +1,43 @@
 {% extends 'layout.html' %}
 
 {% block left %}
-<p>
     <div class="left-section">
-        <h3>All Topics: {{ rooms|length }}</h3>
-        {% for room in rooms %}
+        <h5>Current Page Topics: {{ rooms.total }}</h5>
+        {% for room in rooms.items %}
         <a  class="article-title" href="https://www.google.com/search?q={{room.topic}}" target="_blank">{{room.topic}}</a> <br><br>
     {% endfor %}
     </div>
-</p>
+
+    <h6><b>Dummy Text</b></h6>
+    Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+    when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+    It has survived not only five centuries, but also the leap into electronic typesetting, 
+    remaining essentially unchanged. 
+    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
+    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
 {% endblock left %}
 
 {% block content %}
-    {% for room in rooms %}
+    {% for room in rooms.items %}
         <article class="content-section">
             <div class="media-body">
                 <div class="article-metadata border-bottom mb-2">
                     <img class="rounded-circle host-img" src="{{url_for('static', filename='profile_pics/' + room.creator.image_file) }}">
-                    <a class="article-title" href="{{url_for('profile', username=room.creator.username)}} "><b>@{{ room.creator.username }}</b></a>
+                    <a class="article-title" href="{{url_for('user_rooms', username=room.creator.username)}} "><b>@{{ room.creator.username }}</b></a>
                     <small style="float: right;">{{ room.date_created.strftime('%b %d %Y') }}</small>
                     <h2><a class="article-title" href="{{url_for('room', pk=room.id)}}">
                         {% if room.description|length < 25 %}
                         {{ room.description }}
                         {% else %}
-                            {{ room.description[:50]+' ...' }}
+                            {{ room.description[:100]+' ...' }}
                         {% endif %}
                         </a></h2>
                     <br>
-
-                    <!-- {% if current_user.id == room.creator.id %}
-                        <!-- {{ 'You are the host'}} -->
-                    <!-- {% else %}
-                        <button id={{room.id}} onclick="changeColor('green')">Join?</button>
-                    {% endif %} --> 
-                    <a href="{{url_for('update_room', pk=room.id)}}" class="btn btn-light">Edit Room</a>  
-                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#deleteModal">Delete</button>
-                    <!-- <a href="{{url_for('delete_room', pk=room.id)}}" class="btn btn-warning">Delete Room</a> -->
-                    <!-- Modal -->
-                    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                            <h5 class="modal-title" id="deleteModalLabel">You Sure?</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            </div>
-                            <div class="modal-body">
-                                There is no going back
-                            </div>
-                            <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                            <form action="{{url_for('delete_room', pk=room.id)}}" method="post">
-                                <input class="btn btn-danger" type="submit" value="Delete">
-                            </form>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
+                    {% if current_user == room.creator %}
+                        <a href="{{url_for('update_room', pk=room.id)}}" class="btn btn-light">Edit Room</a>  
+                        <a href="{{url_for('delete_room', pk=room.id)}}" class="btn btn-danger">Delete Room</a>
+                    {% endif %}
                 </div>
                 <small>Joined</small> 
                 <div class="topic">
@@ -70,16 +50,28 @@
             </div>
         </article>
     {% endfor %}
+    {% for page_number in rooms.iter_pages(left_edge=1, left_current=1, right_edge=1,  right_current=2) %}
+        {% if page_number %}
+            {% if rooms.page == page_number %}
+                <a class="btn btn-info" href="{{url_for('home', page=page_number)}}">{{page_number}}</a>
+            {% else %}
+                <a class="btn btn-outline-info" href="{{url_for('home', page=page_number)}}">{{page_number}}</a>
+            {% endif %}
+        {% else %}
+            ...
+        {% endif %}
+    {% endfor %}
 {% endblock content %}
 
 {% block right %}
 <p>
-    Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-    when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
-    It has survived not only five centuries, but also the leap into electronic typesetting, 
-    remaining essentially unchanged. 
-    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
-    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+    <h6><b>Dummy Text</b></h6>
+    It is a long established fact that a reader will be distracted by the readable 
+    content of a page when looking at its layout. The point of using Lorem Ipsum is that 
+    it has a more-or-less normal distribution of letters, as opposed to using 'Content here, 
+    content here', making it look like readable English. Many desktop publishing packages and 
+    web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' 
+    will uncover many web sites still in their infancy. Various versions have evolved over the years, 
+    sometimes by accident, sometimes on purpose (injected humour and the like)
 </p>
 {% endblock right%}
