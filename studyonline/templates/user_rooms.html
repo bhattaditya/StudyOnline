@@ -1,0 +1,49 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="outer-content-section"> 
+        <form>
+            <input class="btn btn-outline-info" value="Go back!" onclick="history.back()">
+        </form>
+        <h4>{{user.name}} has {{rooms.total}} rooms</h4>
+        {% for room in rooms.items %}
+            <article class="content-section">
+                <div class="media-body">
+                    <div class="article-metadata border-bottom mb-2">
+                        <img class="rounded-circle host-img" src="{{url_for('static', filename='profile_pics/' + room.creator.image_file) }}">
+                        <a class="article-title" href="{{url_for('profile', username=room.creator.username)}}"><b>@{{ room.creator.username }}</b></a>
+                        <small style="float: right;">{{ room.date_created.strftime('%b %d %Y') }}</small>
+                        <h2><a class="article-title" href="{{url_for('room', pk=room.id)}}">
+                            {% if room.description|length < 25 %}
+                            {{ room.description }}
+                            {% else %}
+                                {{ room.description[:100]+' ...' }}
+                            {% endif %}
+                            </a></h2>
+                        <br>
+                    </div>
+                    <small>Joined</small> 
+                    <div class="topic">
+                        {% if room.topic|length > 11 %}
+                            <small>{{ room.topic[:5]+' ...' }}</small>
+                        {% else %}
+                            <small>{{ room.topic }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+    {% for page_number in rooms.iter_pages(left_edge=1, left_current=1, right_edge=1,  right_current=2) %}
+        {% if page_number %}
+            {% if rooms.page == page_number %}
+                <a class="btn btn-info" href="{{url_for('user_rooms', page=page_number, username=user.username)}}">{{page_number}}</a>
+            {% else %}
+                <a class="btn btn-outline-info" href="{{url_for('user_rooms', page=page_number, username=user.username)}}">{{page_number}}</a>
+            {% endif %}
+        {% else %}
+            ...
+        {% endif %}
+    {% endfor %}
+    
+{% endblock %}
