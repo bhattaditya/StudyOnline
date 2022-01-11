@@ -2,11 +2,11 @@
 Flask-Login provides user session management. 
 It handles the common tasks of logging in, logging out, and remembering your users' sessions over extended periods of time.
 """
-
+import time
 import secrets
 from os import path
 from PIL import Image
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, abort
 from flask_login import login_user, current_user, logout_user, login_required
 from studyonline import app, db, bcrypt
 from studyonline.models import User, Room
@@ -17,7 +17,8 @@ def home():
     """
     Home Page/ Landing Page
     """
-    rooms = Room.query.order_by(Room.date_created.desc()).all()
+    page = request.args.get('page', 1, type=int)
+    rooms = Room.query.order_by(Room.date_created.desc()).paginate(per_page=5, page=page)
     return render_template('home.html', title='Home', rooms=rooms)
 
 @app.route('/about')
@@ -34,14 +35,9 @@ def room(pk):
     """
     Different rooms created by users.
     """
-    rooms = Room.query.all()
+    room = Room.query.get_or_404(pk)
 
-    found_room = None
-    for room in rooms:
-        if room.id == pk:
-            found_room = room
-
-    return render_template('room.html',title='Room', room=found_room)
+    return render_template('room.html',title='Room', room=room)
 
 @app.route('/login', methods=['GET','POST'])
 def login():
@@ -68,6 +64,7 @@ def logout():
     """
 
     logout_user()
+    time.sleep(2)
     flash('Logged out! see you next time.', 'success')
     return redirect(url_for('home'))
 
@@ -98,6 +95,7 @@ def register():
         user = User(name=form.name.data,username=form.username.data,email=form.email.data, password=hashed_password)
         db.session.add(user)
         db.session.commit()
+        time.sleep(1)
         flash('Successfully registered!', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
@@ -141,6 +139,7 @@ def account():
         current_user.username = form.username.data
         current_user.email = form.email.data
         db.session.commit()
+        time.sleep(1)
         flash('Account Updated!', 'success')
         return redirect(url_for('account'))
     if request.method == 'GET':
@@ -157,11 +156,13 @@ def create_room():
     """
     form= CreateRoomForm()
     if form.validate_on_submit():
-        room = Room(topic=form.topic.data, description=form.description.data, user_id=current_user.id)
+        room = Room(topic=form.topic.data, description=form.description.data, creator=current_user)
         db.session.add(room)
         db.session.commit()
+        time.sleep(1)
         flash('Room Created!', 'success')
         return redirect(url_for('home'))
+        
     return render_template('create_room.html', form=form)
 
 @app.route('/profile/<string:username>')
@@ -177,6 +178,9 @@ def update_room(pk):
     This will update a existing room.
     """
     room = Room.query.get_or_404(pk)
+    if room.creator != current_user:
+        abort(403)
+
     form = UpdateRoomForm()
     if form.validate_on_submit():
         room.topic = form.topic.data
@@ -186,19 +190,37 @@ def update_room(pk):
         return redirect(url_for('home'))
 
     elif request.method == 'GET':
-        # room = Room(topic=form.topic.data, description=form.description.data, user_id=current_user.id)
         form.topic.data = room.topic
         form.description.data = room.description
-
     return render_template('update_room.html', title='Update',form=form) 
 
-@app.route('/delete_room/<int:pk>', methods=['GET', 'POST'])
+@app.route('/delete_room/<int:pk>', methods=['GET','POST'])
+@login_required
 def delete_room(pk):
     """
     This will delete an existing room.
     """
+    
     room = Room.query.get_or_404(pk)
+    if room.creator != current_user:
+        abort(403)
+    
     db.session.delete(room)
     db.session.commit()
-    flash('Room Deleted!', 'success')
+    time.sleep(1)
+    flash('Room deleted!', 'success')
     return redirect(url_for('home'))
+ 
+
+@app.route('/user_rooms/<string:username>')
+def user_rooms(username):
+    """
+    Displays all rooms of a user
+    """
+    page = request.args.get('page', 1, type=int)
+    user = User.query.filter_by(username=username).first_or_404()
+    rooms = Room.query.filter_by(creator=user)\
+                .order_by(Room.date_created.desc())\
+                    .paginate(per_page=5, page=page)
+    
+    return render_template('user_rooms.html', title='Rooms',rooms=rooms, user=user) 
