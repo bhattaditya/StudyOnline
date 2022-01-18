@@ -7,16 +7,21 @@
             <h5>{{room.creator.name}}</h5> 
             <h6>@{{room.creator.username}} (host)</h6>
         </div>
-        
-        
         <h1>{{room.description}}</h1>
         {% if rooms_number|length == 0 %}
             <h5>As of now there are {{room.total_members}} Participants</h5>
         {% else %}
             <h5>As of now there are {{room.total_members}} Participants</h5>
-            <li>
 
-            </li>
+            <li>
+                {{current_user}}
+                hi
+            </li>   
+        {% endif %} 
+        {% if current_user != room.creator %}
+            You can join
+        {% else %}
+            you can't
         {% endif %}
     </div>
         

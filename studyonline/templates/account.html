@@ -6,7 +6,7 @@
             <img class="rounded-circle account-img" src="{{url_for('static', filename='profile_pics/' + current_user.image_file) }}">
             <div class="media-body">
                 <h2 class="account-heading">{{ current_user.name }}</h2>
-                <p class="text-secondary">@{{ current_user.username }}</p>
+                <h6>@{{ current_user.username }}</h6>
             </div>
         </div>
         <form action="" method="post" enctype="multipart/form-data">
@@ -54,7 +54,7 @@
                 </div>
             </fieldset>
             <div class="form-group">
-                {{form.update(class="btn btn-outline-info")}}
+                {{form.submit(class="btn btn-outline-info")}}
             </div>
         </form>
     </div>

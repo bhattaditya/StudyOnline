@@ -6,7 +6,8 @@
             <img class="rounded-circle account-img" src="{{url_for('static', filename='profile_pics/' + user.image_file) }}">
             <div class="media-body">
                 <h2 class="account-heading">@{{ user.username }}</h2>
-                <p class="text-secondary">{{ user.email }}</p>
+                <h6>Name: {{ user.name }}</h6>
+                <h6>Email: {{ user.email }}</h6>
             </div>
         </div>
     </div>
