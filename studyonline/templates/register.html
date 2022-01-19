@@ -8,7 +8,7 @@
                 {{form.hidden_tag()}}
                 <div class="form-group">
                     {{form.name.label(class='form-control-label')}}
-                    {{form.name(class='form-control', placeholder='e.g. Aditya')}}
+                    {{form.name(class='form-control', placeholder='')}}
                 </div>
                 <div class="form-group">
                     {{form.username.label(class='form-control-label')}}
@@ -20,7 +20,7 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{form.username(class='form-control', placeholder='e.g. bhatt005')}}
+                        {{form.username(class='form-control', placeholder='')}}
                     {% endif%} 
                 </div>
                 <div class="form-group">
@@ -46,7 +46,7 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{form.password(class='form-control', placeholder='••••••••')}}
+                        {{form.password(class='form-control', placeholder='')}}
                     {% endif%} 
                 </div>
                 <div class="form-group">
@@ -59,7 +59,7 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{form.confirm_password(class='form-control', placeholder='••••••••')}}
+                        {{form.confirm_password(class='form-control', placeholder='')}}
                     {% endif%} 
                 </div>
                 <div class="form-group">
