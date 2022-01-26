@@ -22,15 +22,43 @@ class User(db.Model, UserMixin):
     By default uselist is True.
     """
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(12), nullable=False)
-    username = db.Column(db.String(6), unique=True, nullable=False)
-    email = db.Column(db.String(15), unique=True, nullable=False)
-    password = db.Column(db.String(30), nullable=False)
-    image_file = db.Column(db.String, nullable=False, default='default.jpg')
-    rooms = db.relationship('Room', backref='creator', lazy=True)
+    id = db.Column(
+            db.Integer, 
+            primary_key=True
+    )
+    name = db.Column(
+            db.String(12), 
+            nullable=False
+    )
+    username = db.Column(
+            db.String(6), 
+            unique=True, 
+            nullable=False
+    )
+    email = db.Column(
+            db.String(15), 
+            unique=True, 
+            nullable=False
+    )
+    password = db.Column(
+            db.String(30), 
+            nullable=False
+    )
+    image_file = db.Column(
+            db.String, 
+            nullable=False, 
+            default='default.jpg'
+    )
+    rooms = db.relationship(
+            'Room', 
+            backref='creator', 
+            lazy=True
+    )
     
-
+    """
+    string representation of objects
+    """
+    
     def __repr__(self):
         return f"User('{self.username}', '{self.email}')"       
 
@@ -42,13 +70,34 @@ class Room(db.Model):
     Room belongs to a user (user_id as foreign key)
     """
 
-    id = db.Column(db.Integer, primary_key=True)
-    topic = db.Column(db.String(20))
-    description = db.Column(db.String(100))
-    date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    id = db.Column(
+            db.Integer, 
+            primary_key=True
+    )
+    topic = db.Column(
+            db.String(20)
+    )
+    description = db.Column(
+            db.String(100)
+    )
+    date_created = db.Column(
+            db.DateTime, 
+            nullable=False, 
+            default=datetime.utcnow
+    )
+    user_id = db.Column(
+            db.Integer, 
+            db.ForeignKey('user.id'), 
+            nullable=False
+    )
     #members = db.relationship('User') 
-    total_members = db.Column(db.Integer, default=0)
+    total_members = db.Column(
+            db.Integer, 
+            default=0
+    )
     
+    """
+    string representation of objects
+    """
     def __repr__(self):
         return f"Room('{self.topic}', '{self.date_created}')"
