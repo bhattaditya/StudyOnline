@@ -12,6 +12,16 @@ class CreateRoomForm(FlaskForm):
             submit
     """
 
-    topic = StringField('Topic', validators=[DataRequired()])
-    description = StringField('Description', validators=[DataRequired()])
+    topic = StringField(
+            'Topic', 
+            validators=[
+                DataRequired()
+            ]
+    )
+    description = StringField(
+                'Description', 
+                validators=[
+                    DataRequired()
+                ]
+    )
     submit = SubmitField('Create Room')
